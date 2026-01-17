@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>송림지역 영무궁화 30일 도전과제</title>
+
+<!-- ✅ PWA 필수 2줄 -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#f8bbd0">
+
+<style>
+body {
+  font-family: "맑은 고딕", sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 10px;
+}
+
+/* 제목 */
+h2 {
+  color: #1976d2;
+  line-height: 1.4;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+/* 이름 */
+.name-box {
+  margin: 10px 0 10px;
+}
+.name-box input {
+  width: 11%;
+  min-width: 90px;
+  height: 35px;
+  font-size: 16px;
+  padding-left: 20px;
+  box-sizing: border-box;
+}
+
+/* 퍼즐 */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background-color: #ffffff;
+  width: 90vw;
+  max-width: 420px;
+  margin: 20px auto;
+  aspect-ratio: 1 / 1;
+}
+
+/* 기본 칸 */
+.cell {
+  position: relative;
+  background-color: #f8bbd0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 14px 4px 4px;
+  font-size: 12px;
+  line-height: 1.3;
+  color: #000000;
+  cursor: pointer;
+  text-align: center;
+  white-space: pre-line;
+  background-image: none;
+  background-size: 400% 400%;
+  background-repeat: no-repeat;
+}
+
+/* 열린 칸 */
+.cell.open {
+  color: transparent;
+  background-color: transparent;
+}
+
+/* 번호 */
+.cell .num {
+  display: block;
+  font-weight: bold;
+  margin-top: 12px;
+  margin-bottom: 4px;
+}
+
+/* 글씨 레이어 */
+.cell span {
+  position: relative;
+  z-index: 2;
+}
+</style>
+</head>
+
+<body>
+
+<h2>
+☆ 송림지역 영무궁화 ☆<br>
+30일 도전과제
+</h2>
+
+<div class="name-box">
+이름 :
+<input type="text" id="username" placeholder="이름을 입력하세요">
+</div>
+
+<p>
+칸을 눌러 도전과제를 완료해 보세요<br>
+모두 열리면 꽃이 완성돼요 🌸
+</p>
+
+<div class="grid" id="grid"></div>
+
+<script>
+const missions = [
+  ["1", "가족에게\n칭찬 하루 1회"],
+  ["2", "매일 감사\n3가지 적기"],
+  ["3", "회원님께\n안부 전하기"],
+  ["4", "나는 존귀한\n사명을 지닌\n소중한\n존재입니다"],
+  ["5", "하루 30분\n산책하기"],
+  ["6", "좋은 습관\n1가지 기록"],
+  ["7", "친구에게\n안부 메시지 보내기"],
+  ["8", "오늘 하루\n긍정적 사고 유지"],
+  ["9", "책 10분 읽기"],
+  ["10", "물 2리터\n마시기"],
+  ["11", "하루 1회\n심호흡 하기"],
+  ["12", "작은 목표\n완료하기"],
+  ["13", "감사 일기\n쓰기"],
+  ["14", "좋은 일\n3가지 생각"],
+  ["15", "나만의 시간\n30분 가지기"],
+  ["16", "편안한 마음으로\n휴식하기"]
+];
+
+const grid = document.getElementById("grid");
+
+/* 이름 저장 */
+const nameInput = document.getElementById("username");
+nameInput.value = localStorage.getItem("username") || "";
+nameInput.oninput = () => {
+  localStorage.setItem("username", nameInput.value);
+};
+
+/* 칸 상태 */
+let states = JSON.parse(localStorage.getItem("cells")) || Array(16).fill(false);
+
+/* 칸 생성 */
+missions.forEach((item, i) => {
+  const cell = document.createElement("div");
+  cell.className = "cell";
+
+  const span = document.createElement("span");
+  span.innerHTML = `<span class="num">${item[0]}</span>${item[1]}`;
+  cell.appendChild(span);
+
+  cell.style.backgroundPosition =
+    `${(i % 4) * 33.33}% ${Math.floor(i / 4) * 33.33}%`;
+
+  if (states[i]) {
+    cell.classList.add("open");
+    cell.style.backgroundImage = "url('flower.jpg')";
+  }
+
+  cell.onclick = () => {
+    cell.classList.toggle("open");
+    states[i] = cell.classList.contains("open");
+    cell.style.backgroundImage = states[i] ? "url('flower.jpg')" : "none";
+    localStorage.setItem("cells", JSON.stringify(states));
+  };
+
+  grid.appendChild(cell);
+});
+</script>
+
+<!-- ✅ service worker 등록 (맨 아래) -->
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js");
+}
+</script>
+
+</body>
+</html>
