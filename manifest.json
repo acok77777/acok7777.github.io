@@ -1,6 +1,6 @@
 {
   "name": "송림지역 영무궁화 30일 도전과제",
-  "short_name": "30일 도전",
+  "short_name": "송림지역 영무궁화 챌린지",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f8bbd0",
@@ -19,3 +19,4 @@
     }
   ]
 }
+
