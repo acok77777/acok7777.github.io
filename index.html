@@ -30,29 +30,22 @@ body{
 
 /* 제목 영역 */
 .title-wrap{
-  position:relative;
-  display:inline-block;
-  padding-top:8px;      /* ✅ 제물포권 아래 여백 최소 */
   margin-top:10px;
 }
 
 /* 제물포권 */
 .top-center{
-  position:absolute;
-  top:-2px;
-  left:50%;
-  transform:translateX(-50%);
   font-family:'Poor Story', cursive;
   font-size:16px;
   font-weight:bold;
-  white-space:nowrap;
+  margin-bottom:4px; /* ✅ 한 줄 여백 */
 }
 
+/* 메인 제목 */
 .main-title{
   font-family:'Poor Story', cursive;
   font-size:26px;
   font-weight:bold;
-  margin-top:2px;       /* ✅ 제물포권과 제목 간격 */
   margin-bottom:6px;
 }
 
@@ -84,22 +77,25 @@ body{
   border:2px solid #ffd27d;
   border-radius:14px;
   padding:6px 12px;
-  max-width:100%;
+  width:100%;
+  max-width:260px;
 }
 
-.flower{font-size:18px;margin-right:6px;}
+.flower{
+  font-size:18px;
+  margin-right:6px;
+}
 
 .name-input{
+  flex:1;                    /* ✅ 모바일에서 폭 확보 */
   border:none;
   outline:none;
   font-size:15px;
-  width:110px;
-  min-width:90px;       /* ✅ 모바일에서 안 사라지게 */
-  max-width:140px;
-  text-align:left;
-  padding-left:6px;
-  margin-left:4px;     /* ✅ 오른쪽 한 칸 이동 */
-  background:transparent;
+  min-width:80px;
+  padding:6px;
+  margin-left:4px;           /* ✅ 오른쪽 한 칸 이동 */
+  background-color:#fff;     /* ✅ 모바일에서 투명 문제 방지 */
+  appearance:none;
 }
 
 /* 안내 */
@@ -147,7 +143,7 @@ body{
   background-repeat:no-repeat;
 }
 
-/* 꽃잎 */
+/* 꽃잎 효과 */
 .petal{
   position:absolute;
   width:8px;
@@ -168,7 +164,7 @@ body{
 .notice{
   font-size:15px;
   margin-top:10px;
-  line-height:1.35; /* 기본 */
+  line-height:1.2;
 }
 
 .notice-date{
@@ -177,13 +173,6 @@ body{
   text-decoration:underline;
 }
 .notice-strong{font-weight:bold;}
-
-/* 📱 모바일 전용 */
-@media (max-width:480px){
-  .notice{
-    line-height:1.1;   /* ✅ 두 줄 사이 여백 제거 */
-  }
-}
 </style>
 </head>
 
@@ -191,7 +180,7 @@ body{
 
 <div class="title-wrap">
   <div class="top-center">&lt;제물포권&gt;</div>
-  <div class="main-title">🌸 (영)무궁화꽃이 피었습니다 🌸</div>
+  <div class="main-title">(영)무궁화꽃이 피었습니다</div>
 </div>
 
 <div class="sub-title">
@@ -257,14 +246,14 @@ missions.forEach((arr,i)=>{
   const r=Math.floor(i/4), c=i%4;
   if(savedOpen.includes(i)){
     cell.classList.add("open");
-    cell.style.backgroundPosition=`${c*33.33}% ${r*33.33}%`;
+    cell.style.backgroundPosition=\`\${c*33.33}% \${r*33.33}%\`;
   }
 
   cell.onclick=()=>{
     cell.classList.toggle("open");
     let now=JSON.parse(localStorage.getItem("openCells")||"[]");
     if(cell.classList.contains("open")){
-      cell.style.backgroundPosition=`${c*33.33}% ${r*33.33}%`;
+      cell.style.backgroundPosition=\`\${c*33.33}% \${r*33.33}%\`;
       if(!now.includes(i)) now.push(i);
       sparkle(cell);
     }else{
