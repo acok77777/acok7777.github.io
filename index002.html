@@ -310,21 +310,10 @@ function sparkle(cell){
     setTimeout(()=>p.remove(),1000);
   }
 }
-</script>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", async () => {
-    try {
-      const reg = await navigator.serviceWorker.register("./service-worker.js");
-      // 업데이트 체크 강제
-      reg.update();
-    } catch (e) {}
-  });
-}
-</script>
 
 </body>
 </html>
+
 
 
 
