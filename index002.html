@@ -4,14 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title> 제물포권 영무궁화 챌린지</title>
-<link rel="manifest" href="manifest.json">
-<link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet">
 
-<!-- ✅ 홈화면 추가(PWA) 아이콘/매니페스트 추가 -->
+<!-- ✅ PWA/홈화면 아이콘 표시 필수 -->
+<link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png" sizes="192x192">
 <link rel="icon" href="icon-512.png" sizes="512x512">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#1976d2">
+
+<link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet">
 
 <style>
 body{
@@ -173,33 +174,6 @@ body{
 }
 .notice-strong{font-weight:bold;}
 </style>
-
-<!-- ✅ (옵션) manifest.json을 HTML에서 자동 생성해서 연결 -->
-<script>
-(function(){
-  const manifest = {
-    name: "제물포권 영무궁화 챌린지",
-    short_name: "영무궁화",
-    start_url: "./index002.html",
-    display: "standalone",
-    background_color: "#ffffff",
-    theme_color: "#1976d2",
-    icons: [
-      { src: "icon-192.png", sizes: "192x192", type: "image/png" },
-      { src: "icon-512.png", sizes: "512x512", type: "image/png" }
-    ]
-  };
-
-  const blob = new Blob([JSON.stringify(manifest)], {type: "application/json"});
-  const url = URL.createObjectURL(blob);
-
-  const link = document.createElement("link");
-  link.rel = "manifest";
-  link.href = url;
-  document.head.appendChild(link);
-})();
-</script>
-
 </head>
 
 <body>
@@ -210,8 +184,8 @@ body{
 </div>
 
 <div class="sub-title">
-<span class="period-title">빙고판 완성기간 :</span>
-<span class="date-strong">1/26(월) ~ 2/25(수)</span>
+  <span class="period-title">빙고판 완성기간 :</span>
+  <span class="date-strong">1/26(월) ~ 2/25(수)</span>
 </div>
 
 <div class="name-box">
@@ -222,15 +196,15 @@ body{
 </div>
 
 <p class="guide">
-칸을 눌러 도전과제를 완료해 보세요. 모두 열리면 꽃이 완성돼요 🌸
+  칸을 눌러 도전과제를 완료해 보세요. 모두 열리면 꽃이 완성돼요 🌸
 </p>
 
 <div class="grid" id="grid"></div>
 
 <div class="notice">
-빙고 3줄 완성 시 소정의 상품을 드립니다<br>
-<span class="notice-date">2월 25일 12시</span>
-<span class="notice-strong">창춘교류회</span> 때 보여주세요
+  빙고 3줄 완성 시 소정의 상품을 드립니다<br>
+  <span class="notice-date">2월 25일 12시</span>
+  <span class="notice-strong">창춘교류회</span> 때 보여주세요
 </div>
 
 <script>
@@ -283,8 +257,7 @@ missions.forEach((arr,i)=>{
   cell.onclick=()=>{
     cell.classList.toggle("open");
     if(cell.classList.contains("open")){
-      cell.style.backgroundPosition=
-      `${c*33.33}% ${r*33.33}%`;
+      cell.style.backgroundPosition = `${c*33.33}% ${r*33.33}%`;
       sparkle(cell);
     }
   };
@@ -298,10 +271,8 @@ function sparkle(cell){
     const p=document.createElement("div");
     p.className="petal";
 
-    p.style.setProperty("--x",
-      (Math.random()*80-40)+"px");
-    p.style.setProperty("--y",
-      (Math.random()*80-40)+"px");
+    p.style.setProperty("--x",(Math.random()*80-40)+"px");
+    p.style.setProperty("--y",(Math.random()*80-40)+"px");
 
     p.style.left="50%";
     p.style.top="50%";
@@ -310,17 +281,47 @@ function sparkle(cell){
     setTimeout(()=>p.remove(),1000);
   }
 }
+</script>
+
+<!-- ✅ 서비스워커: 옛날 캐시 불러오는 문제 방지(업데이트 강제) -->
+<script>
+(function(){
+  if (!("serviceWorker" in navigator)) return;
+
+  // 🔥 버전 올리면 캐시 꼬임이 확 줄어듭니다 (숫자만 바꿔도 됨)
+  const SW_VERSION = "20260120_1";
+
+  window.addEventListener("load", async () => {
+    try {
+      const reg = await navigator.serviceWorker.register("./service-worker.js?v=" + SW_VERSION);
+
+      // 업데이트 강제 체크
+      await reg.update();
+
+      // 새 SW 설치되면 즉시 적용 유도
+      if (reg.waiting) {
+        reg.waiting.postMessage({ type: "SKIP_WAITING" });
+      }
+
+      reg.addEventListener("updatefound", () => {
+        const newWorker = reg.installing;
+        if (!newWorker) return;
+        newWorker.addEventListener("statechange", () => {
+          if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+            // 새 버전 들어오면 바로 새로고침해서 "옛날 화면" 방지
+            location.reload();
+          }
+        });
+      });
+
+    } catch (e) {
+      // 등록 실패해도 페이지는 정상 작동
+    }
+  });
+})();
+</script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
 
 
