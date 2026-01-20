@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>제물포권 영무궁화 챌린지</title>
+<title> 제물포권 영무궁화 챌린지</title>
 
 <!-- PWA/홈화면 아이콘 -->
 <link rel="manifest" href="manifest.json">
@@ -270,10 +270,12 @@ function sparkle(cell){
 }
 </script>
 
+<!-- ✅ 서비스워커 등록(최신 유지). 수정할 때 SW_VERSION 숫자만 올리면 됨 -->
 <script>
 (function(){
   if (!("serviceWorker" in navigator)) return;
-  const SW_VERSION = "20260120_1";
+
+  const SW_VERSION = "v6_20260120";
 
   window.addEventListener("load", async () => {
     try {
@@ -282,10 +284,10 @@ function sparkle(cell){
       if (reg.waiting) reg.waiting.postMessage({ type: "SKIP_WAITING" });
 
       reg.addEventListener("updatefound", () => {
-        const newWorker = reg.installing;
-        if (!newWorker) return;
-        newWorker.addEventListener("statechange", () => {
-          if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+        const nw = reg.installing;
+        if (!nw) return;
+        nw.addEventListener("statechange", () => {
+          if (nw.state === "installed" && navigator.serviceWorker.controller) {
             location.reload();
           }
         });
