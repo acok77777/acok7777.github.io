@@ -14,6 +14,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet">
 
 <style>
+*{box-sizing:border-box;}
+
 body{
   font-family:"맑은 고딕", sans-serif;
   text-align:center;
@@ -30,14 +32,14 @@ body{
 .title-wrap{
   position:relative;
   display:inline-block;
-  padding-top:11px;
-  margin-top:12px;
+  padding-top:8px;      /* ✅ 제물포권 아래 여백 최소 */
+  margin-top:10px;
 }
 
-/* 제물포권 중앙 */
+/* 제물포권 */
 .top-center{
   position:absolute;
-  top:-4px;
+  top:-2px;
   left:50%;
   transform:translateX(-50%);
   font-family:'Poor Story', cursive;
@@ -50,10 +52,11 @@ body{
   font-family:'Poor Story', cursive;
   font-size:26px;
   font-weight:bold;
-  margin-bottom:8px;
+  margin-top:2px;       /* ✅ 제물포권과 제목 간격 */
+  margin-bottom:6px;
 }
 
-/* 기간 글씨 축소 */
+/* 기간 */
 .sub-title{
   font-family:'Poor Story', cursive;
   font-size:16px;
@@ -81,6 +84,7 @@ body{
   border:2px solid #ffd27d;
   border-radius:14px;
   padding:6px 12px;
+  max-width:100%;
 }
 
 .flower{font-size:18px;margin-right:6px;}
@@ -90,10 +94,15 @@ body{
   outline:none;
   font-size:15px;
   width:110px;
+  min-width:90px;       /* ✅ 모바일에서 안 사라지게 */
+  max-width:140px;
   text-align:left;
   padding-left:6px;
+  margin-left:4px;     /* ✅ 오른쪽 한 칸 이동 */
+  background:transparent;
 }
 
+/* 안내 */
 .guide{font-size:13px;}
 
 /* 빙고판 */
@@ -138,7 +147,7 @@ body{
   background-repeat:no-repeat;
 }
 
-/* 꽃잎 효과 */
+/* 꽃잎 */
 .petal{
   position:absolute;
   width:8px;
@@ -155,13 +164,26 @@ body{
   100%{transform:translate(var(--x),var(--y)) scale(1.2);opacity:0;}
 }
 
-.notice{font-size:15px;margin-top:10px;}
+/* 하단 안내 */
+.notice{
+  font-size:15px;
+  margin-top:10px;
+  line-height:1.35; /* 기본 */
+}
+
 .notice-date{
   color:#1976d2;
   font-weight:bold;
   text-decoration:underline;
 }
 .notice-strong{font-weight:bold;}
+
+/* 📱 모바일 전용 */
+@media (max-width:480px){
+  .notice{
+    line-height:1.1;   /* ✅ 두 줄 사이 여백 제거 */
+  }
+}
 </style>
 </head>
 
@@ -217,7 +239,7 @@ const missions=[
 ];
 
 const grid=document.getElementById("grid");
-const savedOpen = JSON.parse(localStorage.getItem("openCells") || "[]");
+const savedOpen=JSON.parse(localStorage.getItem("openCells")||"[]");
 
 missions.forEach((arr,i)=>{
   const cell=document.createElement("div");
@@ -233,7 +255,6 @@ missions.forEach((arr,i)=>{
   cell.appendChild(box);
 
   const r=Math.floor(i/4), c=i%4;
-
   if(savedOpen.includes(i)){
     cell.classList.add("open");
     cell.style.backgroundPosition=`${c*33.33}% ${r*33.33}%`;
@@ -242,7 +263,6 @@ missions.forEach((arr,i)=>{
   cell.onclick=()=>{
     cell.classList.toggle("open");
     let now=JSON.parse(localStorage.getItem("openCells")||"[]");
-
     if(cell.classList.contains("open")){
       cell.style.backgroundPosition=`${c*33.33}% ${r*33.33}%`;
       if(!now.includes(i)) now.push(i);
@@ -252,7 +272,6 @@ missions.forEach((arr,i)=>{
     }
     localStorage.setItem("openCells",JSON.stringify(now));
   };
-
   grid.appendChild(cell);
 });
 
