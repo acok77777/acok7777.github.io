@@ -35,6 +35,7 @@ body{
   margin-top:10px;
 }
 
+/* 제물포권 (그대로 유지) */
 .top-center{
   font-family:'Poor Story', cursive;
   font-size:16px;
@@ -42,15 +43,21 @@ body{
   white-space:nowrap;
 }
 
-.shift-up{ margin-top:-8px; }
+/* ⬇️ 전체 반 칸 위로 */
+.shift-up{
+  margin-top:-8px; /* 반 칸 */
+}
 
+/* 메인 제목 */
 .main-title{
   font-family:'Poor Story', cursive;
   font-size:26px;
   font-weight:bold;
-  margin:4px 0 6px;
+  margin-top:4px;
+  margin-bottom:6px;
 }
 
+/* 기간 */
 .sub-title{
   font-family:'Poor Story', cursive;
   font-size:16px;
@@ -64,8 +71,13 @@ body{
   text-decoration:underline;
 }
 
-/* 이름 */
-.name-box{margin:16px 0;display:flex;justify-content:center;}
+/* 이름 입력 */
+.name-box{
+  margin:16px 0;
+  display:flex;
+  justify-content:center;
+}
+
 .name-wrap{
   display:flex;
   align-items:center;
@@ -73,13 +85,25 @@ body{
   border:2px solid #ffd27d;
   border-radius:14px;
   padding:6px 10px;
-  width:140px;
-}
-.flower{font-size:18px;margin-right:4px;}
-.name-input{
-  flex:1;border:none;outline:none;font-size:14px;background:#fff;
+  width:140px;          /* ✅ 기존 대비 반으로 */
 }
 
+.flower{
+  font-size:18px;
+  margin-right:4px;
+}
+
+.name-input{
+  flex:1;
+  border:none;
+  outline:none;
+  font-size:14px;
+  min-width:60px;
+  padding:4px;
+  background:#fff;
+}
+
+/* 안내 */
 .guide{font-size:13px;}
 
 /* 빙고판 */
@@ -105,7 +129,6 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  color:#000; /* 모바일 하얀칸 방지 */
 }
 
 .text-box{
@@ -125,11 +148,30 @@ body{
   background-repeat:no-repeat;
 }
 
-/* 하단 */
+/* 꽃잎 */
+.petal{
+  position:absolute;
+  width:8px;
+  height:8px;
+  background:radial-gradient(circle,#ff5f8f,#ffc1d9);
+  border-radius:50% 50% 50% 0;
+  transform:rotate(45deg);
+  pointer-events:none;
+  animation:float 1s ease-out forwards;
+}
+
+@keyframes float{
+  0%{transform:scale(0.4);opacity:1;}
+  100%{transform:translate(var(--x),var(--y)) scale(1.2);opacity:0;}
+}
+
+/* 하단 안내 */
 .notice{
   font-size:15px;
   margin-top:10px;
+  line-height:1.25;
 }
+
 .notice-date{
   color:#1976d2;
   font-weight:bold;
@@ -145,6 +187,7 @@ body{
   <div class="top-center">&lt;제물포권&gt;</div>
 
   <div class="shift-up">
+
     <div class="main-title">🌸 (영)무궁화꽃이 피었습니다 🌸</div>
 
     <div class="sub-title">
@@ -159,51 +202,97 @@ body{
       </div>
     </div>
 
-    <p class="guide">칸을 눌러 도전과제를 완료해 보세요 🌸</p>
+    <p class="guide">
+      칸을 눌러 도전과제를 완료해 보세요. 모두 열리면 꽃이 완성돼요 🌸
+    </p>
 
     <div class="grid" id="grid"></div>
 
     <div class="notice">
-      빙고 3줄 완성 시 소정의 상품<br>
+      빙고 3줄 완성 시 소정의 상품을 드립니다<br>
       <span class="notice-date">2월 25일 12시</span>
-      <span class="notice-strong">창춘교류회</span>
+      <span class="notice-strong">창춘교류회</span> 때 보여주세요
     </div>
+
   </div>
 </div>
 
 <script>
 const missions=[
- ["스마일 <b style='font-family:맑은 고딕;font-weight:900;'>DAY</b>","가족에게","3가지 칭찬하기"],
- ["창제 <b style='font-family:맑은 고딕;font-weight:900;'>DAY</b>","평소","창제시간에<br>+10분"],
- ["오.운.완.","오늘 운동 완료","(산책, 스트레칭)<br>OK"], // OK는 얇게
+ ["스마일 DAY","가족에게","3가지 칭찬하기"],
+ ["창제 DAY","평소","창제시간에<br>+10분"],
+ ["오.운.완.","오늘 운동 완료","(산책, 스트레칭<br>OK)"],
  ["땡스 투 ♡","오늘 감사한 일","3가지 적어보기"],
- ["<b style='font-family:맑은 고딕;font-weight:900;'>SDG's DAY</b>","오늘 일회용품","사용금지"],
- ["'나'를 위한 <b style='font-family:맑은 고딕;font-weight:900;'>DAY</b>","나 자신","칭찬해주기"],
- ["우호 <b style='font-family:맑은 고딕;font-weight:900;'>DAY</b>","칸나활동","실천"],
- ["좌담회 <b style='font-family:맑은 고딕;font-weight:900;'>DAY</b>","'나의청년' 및","좌담회 참석"],
- ["우호 <b style='font-family:맑은 고딕;font-weight:900;'>DAY</b>","영무궁화에게","스피치 전하기"],
- ["승리 <b style='font-family:맑은 고딕;font-weight:900;'>DAY</b>","오늘 하루","승리하기"],
- ["허그 <b style='font-family:맑은 고딕;font-weight:900;'>DAY</b>","사랑하는 가족","안아주기"],
- ["'나'를 위한 <b style='font-family:맑은 고딕;font-weight:900;'>DAY</b>","오늘 인스턴트","안 먹기"],
- ["도전 <b style='font-family:맑은 고딕;font-weight:900;'>DAY</b>","하기 싫은 일","도전"],
- ["해방 <b style='font-family:맑은 고딕;font-weight:900;'>DAY</b>","오늘 하루","잔소리 금지"],
- ["영무궁화 <b style='font-family:맑은 고딕;font-weight:900;'>DAY</b>","선배와 함께","활동하기"],
- ["사제 <b style='font-family:맑은 고딕;font-weight:900;'>DAY</b>","신인간혁명","읽기"]
+ ["SDG's DAY","오늘 일회용품","사용금지"],
+ ["'나'를 위한 DAY","나 자신","칭찬해주기"],
+ ["우호 DAY","칸나활동","실천"],
+ ["좌담회 DAY","'나의청년' 및","가족과 함께<br>좌담회 참석"],
+ ["우호 DAY","영무궁화에게<br>스피치 전하기","(회원,회우)"],
+ ["승리 DAY","오늘 하루","신.행.학<br>승리하기"],
+ ["허그 DAY","사랑하는 가족","꼭~안아주기"],
+ ["'나'를 위한 DAY","오늘 인스턴트","음식 안먹기"],
+ ["도전 DAY","하기 싫은 일","즐겁게<br>도전해보기"],
+ ["해방 DAY","오늘 하루","잔소리 금지"],
+ ["영무궁화 DAY","선배와 함께","영무궁화<br>활동하기"],
+ ["사제 DAY","신인간혁명","2권 5페이지<br>읽기"]
 ];
 
 const grid=document.getElementById("grid");
+const savedOpen=JSON.parse(localStorage.getItem("openCells")||"[]");
 
-missions.forEach(arr=>{
+missions.forEach((arr,i)=>{
   const cell=document.createElement("div");
   cell.className="cell";
-  cell.innerHTML=`
-    <div class="text-box">
-      <div class="title">${arr[0]}</div>
-      <div class="subline">${arr[1]}</div>
-      <div class="third">${arr[2]}</div>
-    </div>`;
+
+  const box=document.createElement("div");
+  box.className="text-box";
+  box.innerHTML=`
+    <div class="title">${arr[0]}</div>
+    <div class="subline">${arr[1]}</div>
+    <div class="third">${arr[2]}</div>
+  `;
+  cell.appendChild(box);
+
+  const r=Math.floor(i/4), c=i%4;
+  if(savedOpen.includes(i)){
+    cell.classList.add("open");
+    cell.style.backgroundPosition=`${c*33.33}% ${r*33.33}%`;
+  }
+
+  cell.onclick=()=>{
+    cell.classList.toggle("open");
+    let now=JSON.parse(localStorage.getItem("openCells")||"[]");
+    if(cell.classList.contains("open")){
+      cell.style.backgroundPosition=`${c*33.33}% ${r*33.33}%`;
+      if(!now.includes(i)) now.push(i);
+      sparkle(cell);
+    }else{
+      now=now.filter(v=>v!==i);
+    }
+    localStorage.setItem("openCells",JSON.stringify(now));
+  };
   grid.appendChild(cell);
 });
+
+/* 이름 저장 */
+const nameInput=document.getElementById("nameInput");
+nameInput.value=localStorage.getItem("savedName")||"";
+nameInput.addEventListener("input",()=>{
+  localStorage.setItem("savedName",nameInput.value);
+});
+
+function sparkle(cell){
+  for(let i=0;i<12;i++){
+    const p=document.createElement("div");
+    p.className="petal";
+    p.style.setProperty("--x",(Math.random()*80-40)+"px");
+    p.style.setProperty("--y",(Math.random()*80-40)+"px");
+    p.style.left="50%";
+    p.style.top="50%";
+    cell.appendChild(p);
+    setTimeout(()=>p.remove(),1000);
+  }
+}
 </script>
 
 </body>
